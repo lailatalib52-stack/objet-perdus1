@@ -221,20 +221,15 @@ $stats = $pdo->query("
             <span class="badge-type <?= $a['type'] ?>"><?= $a['type'] === 'perdu' ? 'Perdu' : 'Trouvé' ?></span>
           </a>
           <div class="card-body">
-            <span class="cat-tag"><i class="<?= clean($a['categorie_icone']) ?>"></i>
-              <?= clean($a['categorie_nom']) ?></span>
-            <h3><a
-                href="<?= url('detail.php') ?>?id=<?= $a['id'] ?>"><?= mb_strimwidth(clean($a['description']), 0, 80, '…') ?></a>
-            </h3>
+            <span class="cat-tag"><i class="<?= clean($a['categorie_icone']) ?>"></i> <?= clean($a['categorie_nom']) ?></span>
+            <h3><a href="<?= url('detail.php') ?>?id=<?= $a['id'] ?>"><?= mb_strimwidth(clean($a['description']), 0, 80, '…') ?></a></h3>
             <div class="card-meta">
               <span><i class="fas fa-map-marker-alt"></i> <?= clean($a['lieu_nom']) ?></span>
-              <span><i class="fas fa-calendar-alt"></i>
-                <?= $a['date_objet'] ? date('d/m/Y', strtotime($a['date_objet'])) : date('d/m/Y', strtotime($a['date_creation'])) ?></span>
+              <span><i class="fas fa-calendar-day"></i> <?= $a['date_objet'] ? date('d/m/Y', strtotime($a['date_objet'])) : date('d/m/Y', strtotime($a['date_creation'])) ?></span>
             </div>
           </div>
           <div class="card-footer">
-            <a href="<?= url('detail.php') ?>?id=<?= $a['id'] ?>" class="btn-detail">Voir détail <i
-                class="fas fa-arrow-right"></i></a>
+            <a href="<?= url('detail.php') ?>?id=<?= $a['id'] ?>" class="btn-detail">Voir les détails <i class="fas fa-chevron-right"></i></a>
           </div>
         </article>
       <?php endforeach; ?>
