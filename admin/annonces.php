@@ -9,7 +9,7 @@ elseif ($type_filter === 'trouve')
 elseif ($statut_filter === 'en_attente')
   $active_page = 'annonces_attente';
 else
-  $active_page = 'dashboard';
+  $active_page = 'annonces';
 
 require_once __DIR__ . '/../includes/admin_header.php';
 
@@ -241,8 +241,8 @@ $annonces = $annonces->fetchAll();
   </form>
 </div>
 
-<div class="admin-table-wrap" style="background:transparent; border:none; box-shadow:none;">
-  <table class="admin-table" style="border-collapse: separate; border-spacing: 0 1rem; margin-top:-1rem;">
+<div class="admin-table-wrap" style="background:transparent; border:none; box-shadow:none; overflow:visible !important;">
+  <table class="admin-table" style="border-collapse: separate; border-spacing: 0 1rem; margin-top:-1rem; overflow:visible !important;">
     <thead>
       <tr style="background:transparent; box-shadow:none;">
         <th style="width:60px; padding-left:1.5rem;">#</th>

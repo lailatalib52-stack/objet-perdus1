@@ -79,7 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['demande_recuperation'
       } else {
         $pdo->prepare("INSERT INTO demandes_recuperation (annonce_id,parent_id,eleve_id,message) VALUES(?,?,?,?)")
           ->execute([$id, $user['id'], $eleve_id, $message]);
-        $demandeMsg = '<div class="alert alert-success"><i class="fas fa-check-circle"></i> Votre demande de récupération a été soumise. L\'administration vous contactera.</div>';
+        header('Location: ' . url('parent-demandes.php') . '?msg=demande_soumise');
+        exit;
       }
     }
   }

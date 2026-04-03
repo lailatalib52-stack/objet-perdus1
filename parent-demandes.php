@@ -27,6 +27,12 @@ $demandes = $demandes->fetchAll();
         </div>
     </div>
 
+    <?php if (isset($_GET['msg']) && $_GET['msg'] === 'demande_soumise'): ?>
+        <div class="alert alert-success" style="margin-bottom: 2rem;">
+            <i class="fas fa-check-circle"></i> Votre demande de récupération a été soumise avec succès. L'administration va la traiter rapidement.
+        </div>
+    <?php endif; ?>
+
     <?php if (empty($demandes)): ?>
         <div class="empty-state">
             <i class="fas fa-clipboard-list"></i>

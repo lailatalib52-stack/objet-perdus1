@@ -1,7 +1,5 @@
 <?php
-/**
- * Header commun pour l'administration (Modèle Enterprise)
- */
+
 require_once __DIR__ . '/auth.php';
 requireRole('admin', 'personnel');
 $admin_user = getCurrentUser();

@@ -6,24 +6,30 @@
 // ou dans un sous-dossier (localhost/objets_perdus/)
 
 if (!defined('BASE_URL')) {
-    $script  = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
-    // Remonte jusqu'à la racine du projet (dossier contenant includes/)
+    // Si on tourne sur localhost:8000, la racine est souvent vide ou /
+    // On essaie de détecter le dossier de base de manière propre
+    $script = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
     $base = dirname($script);
-    // Si on est dans /admin/, remonter d'un niveau
-    if (basename($base) === 'admin') {
-        $base = dirname($base);
-    }
-    // Nettoyer le slash final
+    $base = str_replace('\\', '/', $base);
+    
+    // Si on est dans un sous-dossier connu des scripts (admin, includes, etc.)
+    // on remonte jusqu'à la racine du projet
+    $base = preg_replace('#/(admin|includes|public|ajax|api)$#i', '', $base);
+    
+    // On s'assure que base commence par / et ne finit pas par /
+    $base = '/' . ltrim($base, '/');
     $base = rtrim($base, '/');
+    
     define('BASE_URL', $base);
 }
 
 /**
  * Retourne l'URL absolue depuis la racine du projet
- * Exemple : url('/public/css/style.css') → /objets_perdus/public/css/style.css
  */
 function url(string $path): string {
-    return BASE_URL . '/' . ltrim($path, '/');
+    $path = ltrim($path, '/');
+    // BASE_URL est soit "" soit "/xxx"
+    return BASE_URL . '/' . $path;
 }
 
 /**

@@ -1,17 +1,14 @@
-/* ============================================================
-   OBJETSECOLE — Design System v5 — Light Animated Edition
-   ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap');
 
-/* Désactive globalement toutes les animations et transitions */
+
 * {
   animation: none !important;
   transition: none !important;
 }
 
 :root {
-  /* ── COLOR SYSTEM (Professional Light Theme) ── */
+
   --bg: #ffffff;
   --bg2: #f8f9fa;
   --bg3: #e9ecef;
@@ -5926,7 +5923,7 @@ textarea {
 }
 
 .btn-new-annonce {
-  background: #6366f1;
+  background: #3436cf;
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 14px;
@@ -6211,46 +6208,85 @@ textarea {
 
 /* Action buttons specifically for the new style */
 .btn-action {
-  padding: 0.45rem 0.85rem;
-  border-radius: 6px;
-  font-size: 0.82rem;
+  padding: 0.65rem 1.2rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
   font-weight: 700;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  border: 1px solid var(--admin-border);
-  transition: all 0.2s;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .btn-action.blue {
-  border-color: #3b82f6;
-  color: #1d4ed8;
-  background: #eff6ff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-action.green {
-  border-color: #10b981;
-  color: #065f46;
-  background: #ecfdf5;
+  background: linear-gradient(135deg, #10b981, #0f766e);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-action.red {
-  border-color: #ef4444;
-  color: #991b1b;
-  background: #fef2f2;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .btn-action.gray {
-  border-color: #94a3b8;
-  color: #334155;
-  background: #f1f5f9;
+  background: var(--bg2);
+  color: var(--text2);
+  border: 1px solid var(--border);
 }
 
 .btn-action:hover {
-  filter: brightness(0.95);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  filter: brightness(1.03);
 }
+
+.btn-action:active {
+  transform: translateY(0px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* Also align .btn-add (nouveau) with .btn-action style */
+.btn-add {
+  padding: 0.65rem 1.3rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  background-size: 200% 200%;
+  color: #fff;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-position 0.5s ease;
+}
+
+.btn-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  background-position: right center;
+}
+
+.btn-add:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
 
 /* Compact ID */
 .id-cell {
