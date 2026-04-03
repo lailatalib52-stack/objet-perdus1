@@ -92,8 +92,8 @@ $utilisateurs = $pdo->query("SELECT * FROM utilisateurs WHERE role IN ('admin', 
         <div class="form-group"><label>Mot de passe *</label><input type="password" name="password" required minlength="6" class="admin-input"></div>
         <div class="form-group"><label>Rôle *</label>
           <select name="role" class="admin-input">
-            <option value="personnel">Personnel (CPE)</option>
-            <option value="admin">Administrateur</option>
+            <option value="personnel">CPE</option>
+            <option value="admin">Administrateur (ADMIN)</option>
           </select>
         </div>
         <div class="form-group"><label>Prénom</label><input type="text" name="prenom" class="admin-input"></div>
@@ -139,7 +139,7 @@ $utilisateurs = $pdo->query("SELECT * FROM utilisateurs WHERE role IN ('admin', 
             <td>
               <span class="statut-pill-premium <?= $u['role']==='admin'?'perdu':'trouve' ?>" style="opacity:0.9;">
                 <i class="fas fa-<?= $u['role']==='admin'?'user-shield':'user' ?>"></i>
-                <?= ucfirst($u['role']==='personnel'?'Personnel':$u['role']) ?>
+                <?= clean($u['role']==='admin'?'ADMIN':'CPE') ?>
               </span>
             </td>
 

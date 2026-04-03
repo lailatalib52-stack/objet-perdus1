@@ -20,7 +20,7 @@ $eleves = $eleves->fetchAll();
         <div class="empty-state">
             <i class="fas fa-user-slash"></i>
             <h3>Aucun élève associé</h3>
-            <p>Veuillez contacter l'administration de l'école pour lier vos enfants à votre compte parent.</p>
+            <p>Veuillez contacter le bureau du CPE pour lier vos enfants à votre compte parent.</p>
         </div>
     <?php else: ?>
         <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.5rem;">

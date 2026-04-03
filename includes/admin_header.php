@@ -22,7 +22,7 @@ if (!isset($active_page))
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title><?= isset($page_title) ? $page_title . ' – ' : '' ?>Objets École Admin</title>
+  <title><?= isset($page_title) ? $page_title . ' – ' : '' ?>Objets École <?= ($admin_user['role'] === 'admin') ? 'Admin' : 'CPE' ?></title>
   <link rel="stylesheet" href="<?= url('public/css/style.css') ?>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
@@ -34,7 +34,7 @@ if (!isset($active_page))
     <div class="nav-inner">
       <a href="<?= url('admin/index.php') ?>" class="logo">
         <span class="logo-icon"><i class="fas fa-search-location"></i></span>
-        <strong>Objets École</strong> <span>ADMIN</span>
+        <strong>Objets École</strong> <span><?= ($admin_user['role'] === 'admin') ? 'ADMIN' : 'CPE' ?></span>
       </a>
 
       <div class="nav-actions">

@@ -80,7 +80,7 @@ $csrf = generateCSRF();
         <div class="form-group">
           <label><i class="fas fa-id-card"></i> Identifiant</label>
           <div class="input-with-icon">
-            <input type="text" name="login" required placeholder="Ex: admin" autocomplete="username">
+            <input type="text" name="login" required placeholder="Ex: cpe" autocomplete="username">
           </div>
         </div>
 
