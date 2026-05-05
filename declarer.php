@@ -1,3 +1,64 @@
+<?php
+require_once __DIR__ . '/includes/auth.php';
+startSession();
+
+$pdo = getDB();
+$user = getCurrentUser(); // Peut être null si non connecté
+$csrf = generateCSRF();
+$error = '';
+$msg = '';
+
+$categories = $pdo->query("SELECT * FROM categories ORDER BY nom")->fetchAll();
+$lieux = $pdo->query("SELECT * FROM lieux ORDER BY nom")->fetchAll();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRF($_POST['csrf_token'] ?? '')) {
+    $type = clean($_POST['type'] ?? '');
+    $cat_id = (int)($_POST['categorie_id'] ?? 0);
+    $lieu_id = (int)($_POST['lieu_id'] ?? 0);
+    $desc = clean($_POST['description'] ?? '');
+    $date_obj = clean($_POST['date_objet'] ?? date('Y-m-d'));
+    $declarant = clean($_POST['declarant_nom'] ?? '');
+    $email = clean($_POST['contact_email'] ?? '');
+    $tel = clean($_POST['contact_tel'] ?? '');
+    
+    if ($type && $cat_id && strlen($desc) >= 10) {
+        $photo_url = '';
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
+            $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+            $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+            if (in_array($ext, $allowed)) {
+                $filename = uniqid() . '.' . $ext;
+                if (!is_dir('public/uploads')) mkdir('public/uploads', 0777, true);
+                move_uploaded_file($_FILES['photo']['tmp_name'], 'public/uploads/' . $filename);
+                $photo_url = 'public/uploads/' . $filename;
+            }
+        }
+        
+        $sql = "INSERT INTO annonces (type, categorie_id, lieu_id, description, date_objet, photo_url, user_id, declarant_nom, contact_email, contact_tel, statut) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'en_attente')";
+        $stmt = $pdo->prepare($sql);
+        $res = $stmt->execute([
+            $type, $cat_id, $lieu_id ?: null, $desc, $date_obj, $photo_url, 
+            $user ? $user['id'] : null, $declarant, $email, $tel
+        ]);
+        
+        if ($res) {
+            header('Location: ' . url('index.php?msg=Merci ! Votre annonce est en attente de validation.'));
+            exit;
+        } else {
+            $error = "Une erreur est survenue lors de l'enregistrement.";
+        }
+    } else {
+        $error = "Veuillez remplir tous les champs obligatoires (Type, Catégorie, Description min. 10 car.).";
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Déclarer un objet - <?= SITE_NAME ?></title>
   <link rel="stylesheet" href="<?= url('public/css/style.css') ?>">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
