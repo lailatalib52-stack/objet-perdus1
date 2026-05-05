@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRF($_POST['csrf_token'] ?? 
     </div>
 
     <div class="form-actions" style="display:flex; gap:1.5rem; padding-top:2rem; border-top:1px solid var(--border);">
-      <button type="submit" class="btn-new-annonce" style="flex:2; justify-content:center; padding:1rem; font-size:1.1rem;">
+      <button type="submit" class="btn btn-new-annonce" style="flex:2; justify-content:center; padding:1rem; font-size:1.1rem;">
         <i class="fas fa-save"></i> Enregistrer les modifications
       </button>
       <a href="javascript:void(0)" onclick="goBack('<?= url('admin/annonces.php') ?>')" class="btn-action gray" style="flex:1; justify-content:center; padding:1rem; font-size:1.1rem;">

@@ -69,11 +69,11 @@ if ($_SERVER['REQUEST_METHOD']==='POST' && verifyCSRF($_POST['csrf_token']??''))
 $utilisateurs = $pdo->query("SELECT * FROM utilisateurs WHERE role IN ('admin', 'personnel') ORDER BY role, nom")->fetchAll();
 ?>
 
-    <div class="vue-ensemble-header">
-      <div class="vue-ensemble-title" style="text-transform:none; font-size:1.6rem; font-weight:700;">
-        <i class="fas fa-users-cog" style="color:var(--accent);"></i> Gestion des Utilisateurs
+    <div class="page-header-v3">
+      <div>
+        <h1>Gestion des Utilisateurs</h1>
       </div>
-      <button onclick="document.getElementById('addForm').style.display='block'; this.style.display='none'" class="btn-new-annonce" style="background:#6366f1; border:none; padding:0.6rem 1.2rem; font-size:0.9rem;">
+      <button onclick="document.getElementById('addForm').style.display='block'; this.style.display='none'" class="btn-action-saas btn-primary-saas">
         <i class="fas fa-user-plus"></i> Nouvel Utilisateur
       </button>
     </div>
@@ -81,35 +81,34 @@ $utilisateurs = $pdo->query("SELECT * FROM utilisateurs WHERE role IN ('admin', 
     <?php if ($msg): ?><div class="alert alert-success"><i class="fas fa-check"></i> <?= clean($msg) ?></div><?php endif; ?>
     <?php if ($error): ?><div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <?= clean($error) ?></div><?php endif; ?>
 
-    <div id="addForm" class="admin-section" style="display:none; padding:2.5rem; margin-bottom:2rem; border-radius:20px; box-shadow:0 10px 30px rgba(0,0,0,0.05);">
+    <div id="addForm" class="saas-card" style="display:none; margin-bottom:2.5rem;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-        <h2 style="margin:0; font-family:'Playfair Display', serif; font-size:1.4rem;"><i class="fas fa-user-shield" style="color:#6366f1;"></i> Ajouter un compte</h2>
-        <button onclick="document.getElementById('addForm').style.display='none'; document.querySelector('.btn-new-annonce').style.display='inline-flex'" class="btn-action gray">Fermer</button>
+        <h2 style="margin:0; font-size:1.4rem; font-weight:800;"><i class="fas fa-user-shield" style="color:#3b82f6;"></i> Ajouter un compte</h2>
+        <button onclick="document.getElementById('addForm').style.display='none'; document.querySelector('.btn-primary-saas').style.display='inline-flex'" class="btn-action-saas badge-saas gray">Fermer</button>
       </div>
-      <form method="POST" class="grid-form" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.5rem;">
+      <form method="POST" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.5rem;">
         <input type="hidden" name="csrf_token" value="<?= $csrf ?>"><input type="hidden" name="action" value="add">
-        <div class="form-group"><label>Identifiant (Login) *</label><input type="text" name="login" required minlength="3" class="admin-input"></div>
-        <div class="form-group"><label>Mot de passe *</label><input type="password" name="password" required minlength="6" class="admin-input"></div>
-        <div class="form-group"><label>Rôle *</label>
-          <select name="role" class="admin-input">
+        <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Identifiant (Login) *</label><input type="text" name="login" required minlength="3" class="admin-input" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+        <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Mot de passe *</label><input type="password" name="password" required minlength="6" class="admin-input" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+        <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Rôle *</label>
+          <select name="role" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;">
             <option value="personnel">CPE</option>
             <option value="admin">Administrateur (ADMIN)</option>
           </select>
         </div>
-        <div class="form-group"><label>Prénom</label><input type="text" name="prenom" class="admin-input"></div>
-        <div class="form-group"><label>Nom</label><input type="text" name="nom" class="admin-input"></div>
-        <div class="form-group"><label>Email</label><input type="email" name="email" class="admin-input"></div>
-        <div class="form-group"><label>Téléphone</label><input type="tel" name="tel" class="admin-input"></div>
-        <div class="form-group full" style="grid-column:1/-1; margin-top:1rem;">
-          <button type="submit" class="btn-new-annonce" style="width:100%; justify-content:center; padding:1rem;">
-             <i class="fas fa-save"></i> Créer le compte
+        <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Prénom</label><input type="text" name="prenom" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+        <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Nom</label><input type="text" name="nom" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+        <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Email</label><input type="email" name="email" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <button type="submit" class="btn-action-saas btn-primary-saas" style="width:100%; justify-content:center;">
+             <i class="fas fa-save"></i> Créer le compte utilisateur
           </button>
         </div>
       </form>
     </div>
 
-    <div class="admin-card-premium">
-      <table class="table-premium">
+    <div class="saas-card" style="padding:0; overflow:hidden;">
+      <table class="saas-table">
         <thead>
           <tr>
             <th style="width:80px;">ID</th>
@@ -122,29 +121,28 @@ $utilisateurs = $pdo->query("SELECT * FROM utilisateurs WHERE role IN ('admin', 
         </thead>
         <tbody>
           <?php foreach ($utilisateurs as $u): ?>
-          <tr class="<?= !$u['actif']?'row-inactive':'' ?>">
-            <td class="id-cell" style="font-weight:800; color:var(--text); font-size:1rem;">#<?= $u['id'] ?></td>
+          <tr style="<?= !$u['actif']?'opacity:0.6; background:#fcfcfc;':'' ?>">
+            <td style="font-weight:800; color:#94a3b8;">#<?= $u['id'] ?></td>
             <td>
-              <div class="obj-cell-premium">
-                <div class="obj-img-rounded" style="background:var(--bg3); color:var(--accent); font-weight:700;">
+              <div style="display:flex; align-items:center; gap:1rem;">
+                <div style="width:40px; height:40px; border-radius:12px; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.9rem; border:1px solid #dbeafe;">
                    <?= strtoupper(substr($u['prenom']??'U',0,1)) ?>
                 </div>
-                <div class="obj-info-main">
-                  <span class="title"><?= clean($u['prenom'].' '.$u['nom']) ?></span>
-                  <span class="badge-sub"><?= clean($u['email']??'—') ?></span>
+                <div>
+                  <div style="font-weight:700; color:#1e293b; font-size:0.95rem;"><?= clean($u['prenom'].' '.$u['nom']) ?></div>
+                  <div style="font-size:0.8rem; color:#64748b;"><?= clean($u['email']??'—') ?></div>
                 </div>
               </div>
             </td>
-            <td><code style="background:var(--bg2); padding:0.25rem 0.6rem; border-radius:8px; color:var(--text2); font-size:0.9rem; border:1px solid var(--border);"><?= clean($u['login']) ?></code></td>
+            <td><code style="background:#f1f5f9; padding:0.3rem 0.6rem; border-radius:8px; color:#475569; font-size:0.85rem; font-weight:600;"><?= clean($u['login']) ?></code></td>
             <td>
-              <span class="statut-pill-premium <?= $u['role']==='admin'?'perdu':'trouve' ?>" style="opacity:0.9;">
+              <span class="badge-saas <?= $u['role']==='admin'?'red':'blue' ?>">
                 <i class="fas fa-<?= $u['role']==='admin'?'user-shield':'user' ?>"></i>
                 <?= clean($u['role']==='admin'?'ADMIN':'CPE') ?>
               </span>
             </td>
-
             <td>
-              <span class="statut-pill-premium <?= $u['actif']?'trouve':'archive' ?>">
+              <span class="badge-saas <?= $u['actif']?'green':'gray' ?>">
                 <i class="fas fa-<?= $u['actif']?'check-circle':'ban' ?>"></i>
                 <?= $u['actif']?'Actif':'Bloqué' ?>
               </span>
@@ -158,19 +156,18 @@ $utilisateurs = $pdo->query("SELECT * FROM utilisateurs WHERE role IN ('admin', 
                       <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                       <input type="hidden" name="action" value="toggle">
                       <input type="hidden" name="id" value="<?= $u['id'] ?>">
-                      <button type="submit" class="dropdown-item <?= $u['actif']?'danger':'success' ?>">
+                      <button type="submit" class="dropdown-item">
                         <i class="fas fa-<?= $u['actif']?'ban':'check' ?>"></i> <?= $u['actif']?'Bloquer':'Activer' ?>
                       </button>
                     </form>
                   <?php endif; ?>
 
                   <button type="button" onclick="openEditModal(<?= htmlspecialchars(json_encode($u), ENT_QUOTES) ?>)" class="dropdown-item">
-                    <i class="fas fa-edit"></i> Modifier <?= $u['id'] === (int)$admin_user['id'] ? '(Moi)' : '' ?>
+                    <i class="fas fa-edit"></i> Modifier
                   </button>
 
                   <?php if ($u['id'] !== (int)$admin_user['id']): ?>
-                    <div style="height:1px; background:var(--border); margin:0.3rem 0;"></div>
-                    <form method="POST" style="margin:0;" onsubmit="return confirm('Confirmer la suppression ?')">
+                    <form method="POST" style="margin:0;" onsubmit="handleConfirm(event, this, {title:'Supprimer ?', text:'Voulez-vous vraiment supprimer définitivement cet utilisateur ?', danger:true})">
                       <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                       <input type="hidden" name="action" value="delete">
                       <input type="hidden" name="id" value="<?= $u['id'] ?>">
@@ -189,22 +186,24 @@ $utilisateurs = $pdo->query("SELECT * FROM utilisateurs WHERE role IN ('admin', 
     </div>
 
 <!-- Modal pour l'édition -->
-<div id="editModal" class="modal" style="display:none;">
-  <div class="modal-box">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-      <h3 style="margin:0;"><i class="fas fa-edit"></i> Modifier l'utilisateur</h3>
-      <button onclick="closeModal()" class="btn-action gray">Fermer</button>
+<div id="editModal" class="w-modal-overlay" style="display:flex; opacity:0; pointer-events:none; transition: all 0.3s ease;">
+  <div class="saas-card" style="width:100%; max-width:500px; transform: scale(0.9); transition: all 0.3s ease;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+      <h2 style="margin:0; font-size:1.4rem; font-weight:800;"><i class="fas fa-edit" style="color:#3b82f6;"></i> Modifier le compte</h2>
+      <button onclick="closeModal()" class="btn-action-saas badge-saas gray">Fermer</button>
     </div>
-    <form method="POST">
+    <form method="POST" style="display:flex; flex-direction:column; gap:1.25rem;">
       <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
       <input type="hidden" name="action" value="edit">
       <input type="hidden" name="id" id="editId">
-      <div class="form-group"><label>Prénom</label><input type="text" name="prenom" id="editPrenom" class="admin-input"></div>
-      <div class="form-group"><label>Nom</label><input type="text" name="nom" id="editNom" class="admin-input"></div>
-      <div class="form-group"><label>Email</label><input type="email" name="email" id="editEmail" class="admin-input"></div>
-      <div class="form-group"><label>Login</label><input type="text" name="login" id="editLogin" class="admin-input"></div>
-      <div class="form-group"><label>Nouveau mot de passe (laisser vide pour ne pas changer)</label><input type="password" name="password" class="admin-input"></div>
-      <button type="submit" class="btn-new-annonce" style="width:100%; justify-content:center; margin-top:1rem;">Enregistrer</button>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Prénom</label><input type="text" name="prenom" id="editPrenom" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Nom</label><input type="text" name="nom" id="editNom" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Email</label><input type="email" name="email" id="editEmail" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Login</label><input type="text" name="login" id="editLogin" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Nouveau mot de passe <small>(Laisser vide pour garder l'actuel)</small></label><input type="password" name="password" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <button type="submit" class="btn-action-saas btn-primary-saas" style="width:100%; justify-content:center; padding:1rem; margin-top:0.5rem;">
+        <i class="fas fa-save"></i> Enregistrer les modifications
+      </button>
     </form>
   </div>
 </div>
@@ -216,11 +215,18 @@ function openEditModal(user) {
   document.getElementById('editNom').value = user.nom;
   document.getElementById('editEmail').value = user.email;
   document.getElementById('editLogin').value = user.login;
-  document.getElementById('editModal').style.display = 'flex';
+  
+  const modal = document.getElementById('editModal');
+  modal.style.opacity = '1';
+  modal.style.pointerEvents = 'auto';
+  modal.querySelector('.saas-card').style.transform = 'scale(1)';
 }
 
 function closeModal() {
-  document.getElementById('editModal').style.display = 'none';
+  const modal = document.getElementById('editModal');
+  modal.style.opacity = '0';
+  modal.style.pointerEvents = 'none';
+  modal.querySelector('.saas-card').style.transform = 'scale(0.9)';
 }
 </script>
 

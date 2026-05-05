@@ -131,121 +131,84 @@ $annonces->execute($params2);
 $annonces = $annonces->fetchAll();
 ?>
 
-<div class="vue-ensemble-header">
-  <div class="vue-ensemble-title" style="text-transform:none; font-size:1.6rem; font-weight:700;">
-    <i class="fas fa-list-ul" style="color:var(--accent);"></i> Gestion des Annonces
+<div class="page-header-v3">
+  <div>
+    <h1>Gestion des Annonces</h1>
   </div>
-  <button onclick="document.getElementById('addAnnonceForm').style.display='block'; this.style.display='none'" class="btn-new-annonce">
-    <i class="fas fa-plus"></i> Nouvelle Annonce
+  <button onclick="document.getElementById('addAnnonceForm').style.display='block'; this.style.display='none'" class="btn-action-saas btn-primary-saas">
+    <i class="fas fa-plus"></i> Nouvelle annonce
   </button>
 </div>
 
-<?php if ($msg): ?>
-  <div class="alert alert-success"><i class="fas fa-check"></i> <?= clean($msg) ?></div>
-<?php endif; ?>
-<?php if (!empty($error)): ?>
-  <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <?= clean($error) ?></div>
-<?php endif; ?>
+<?php if ($msg): ?><div class="alert alert-success"><i class="fas fa-check"></i> <?= clean($msg) ?></div><?php endif; ?>
+<?php if (!empty($error)): ?><div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <?= clean($error) ?></div><?php endif; ?>
 
-<div id="addAnnonceForm" class="admin-section" style="display:none; padding:2rem; margin-bottom:2rem; background:#fff; border-radius:12px; box-shadow:var(--admin-shadow);">
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-    <h2 style="margin:0; font-size:1.2rem;"><i class="fas fa-plus-circle"></i> Créer une nouvelle annonce</h2>
-    <button onclick="document.getElementById('addAnnonceForm').style.display='none'; document.querySelector('.btn-new-annonce').style.display='inline-flex'" class="btn-action gray">Fermer</button>
+<div id="addAnnonceForm" class="saas-card" style="display:none; margin-bottom:2.5rem;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+    <h2 style="margin:0; font-size:1.4rem; font-weight:800;"><i class="fas fa-plus-circle" style="color:#3b82f6;"></i> Créer une annonce</h2>
+    <button onclick="document.getElementById('addAnnonceForm').style.display='none'; document.querySelector('.btn-primary-saas').style.display='inline-flex'" class="btn-action-saas badge-saas gray">Fermer</button>
   </div>
-  
-  <form method="POST" enctype="multipart/form-data" class="grid-form" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.5rem;">
-    <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
-    <input type="hidden" name="action" value="add">
-    
-    <div class="form-group">
-      <label>Type d'objet *</label>
-      <select name="type" required class="admin-input">
+  <form method="POST" enctype="multipart/form-data" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.5rem;">
+    <input type="hidden" name="csrf_token" value="<?= $csrf ?>"><input type="hidden" name="action" value="add">
+    <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Type *</label>
+      <select name="type" required style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;">
         <option value="">— Choisir —</option>
         <option value="perdu">Perdu (Je cherche)</option>
         <option value="trouve">Trouvé (J'ai trouvé)</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>Catégorie *</label>
-      <select name="categorie_id" required class="admin-input">
+    <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Catégorie *</label>
+      <select name="categorie_id" required style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;">
         <option value="">— Choisir —</option>
-        <?php foreach ($categories as $c): ?>
-          <option value="<?= $c['id'] ?>"><?= clean($c['nom']) ?></option>
-        <?php endforeach; ?>
+        <?php foreach ($categories as $c): ?><option value="<?= $c['id'] ?>"><?= clean($c['nom']) ?></option><?php endforeach; ?>
       </select>
     </div>
-    <div class="form-group">
-      <label>Lieu <small>(Requis si trouvé)</small></label>
-      <select name="lieu_id" class="admin-input">
+    <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Lieu</label>
+      <select name="lieu_id" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;">
         <option value="">— Choisir —</option>
-        <?php foreach ($lieux as $l): ?>
-          <option value="<?= $l['id'] ?>"><?= clean($l['nom']) ?> <?= $l['batiment'] ? ' (' . $l['batiment'] . ')' : '' ?></option>
-        <?php endforeach; ?>
+        <?php foreach ($lieux as $l): ?><option value="<?= $l['id'] ?>"><?= clean($l['nom']) ?> <?= $l['batiment'] ? ' (' . $l['batiment'] . ')' : '' ?></option><?php endforeach; ?>
       </select>
     </div>
-
-    <div class="form-group">
-      <label>Date de l'événement</label>
-      <input type="date" name="date_objet" value="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d') ?>" class="admin-input">
-    </div>
-    <div class="form-group" style="grid-column:1/-1;">
-      <label>Description détaillée (min. 10 caractères) *</label>
-      <textarea name="description" rows="3" required class="admin-input" placeholder="Décrivez l'objet (marque, signes distinctifs...)"></textarea>
-    </div>
-    <div class="form-group" style="grid-column:1/-1;">
-      <label>Photo de l'objet (optionnel, max 2 Mo)</label>
-      <input type="file" name="photo" accept="image/*" class="admin-input">
-    </div>
-    
-    <div class="form-group full" style="grid-column:1/-1;">
-      <button type="submit" class="btn-action blue" style="width:100%; justify-content:center; padding:0.8rem;">
-        <i class="fas fa-save"></i> Publier l'annonce
-      </button>
-    </div>
+    <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Date</label><input type="date" name="date_objet" value="<?= date('Y-m-d') ?>" max="<?= date('Y-m-d') ?>" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+    <div class="form-group" style="grid-column:1/-1;"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Description détaillée *</label><textarea name="description" rows="3" required style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;" placeholder="Décrivez l'objet (marque, couleurs, signes distinctifs...)"></textarea></div>
+    <div class="form-group" style="grid-column:1/-1;"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Photo (max 2 Mo)</label><input type="file" name="photo" accept="image/*" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0; background:#f8fafc;"></div>
+    <div class="form-group" style="grid-column:1/-1;"><button type="submit" class="btn-action-saas btn-primary-saas" style="width:100%; justify-content:center;"><i class="fas fa-save"></i> Publier l'annonce</button></div>
   </form>
 </div>
 
-<!-- Barre de Filtres Modernisée -->
-<div class="admin-section" style="padding:1.2rem; margin-bottom:2rem; border-radius:16px;">
-  <form class="filters-form" method="GET" style="display:flex; gap:1.2rem; align-items:center; flex-wrap:wrap;">
-    <div class="filter-group" style="display:flex; align-items:center; gap:0.8rem; background:var(--bg2); padding:0.4rem 1rem; border-radius:12px; border:1px solid var(--border);">
-      <i class="fas fa-filter" style="color:var(--text3); font-size:0.9rem;"></i>
-      <select name="statut" class="admin-input-clean" style="border:none; background:transparent; font-weight:600; color:var(--text2); outline:none; padding:0.2rem;">
+<!-- Filtres Modernisés -->
+<div class="saas-card" style="padding:1.25rem 2rem; margin-bottom:2.5rem;">
+  <form method="GET" style="display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:0.75rem; background:#f8fafc; padding:0.5rem 1rem; border-radius:12px; border:1px solid #e2e8f0;">
+      <i class="fas fa-filter" style="color:#94a3b8; font-size:0.9rem;"></i>
+      <select name="statut" style="border:none; background:transparent; font-weight:600; color:#475569; outline:none; font-size:0.9rem; cursor:pointer;">
         <option value="">Tous les statuts</option>
         <?php foreach (['en_attente' => 'En attente', 'valide' => 'Validé', 'archive' => 'Archivé'] as $v => $l): ?>
           <option value="<?= $v ?>" <?= $statut == $v ? 'selected' : '' ?>><?= $l ?></option>
         <?php endforeach; ?>
       </select>
     </div>
-
-    <div class="filter-group" style="display:flex; align-items:center; gap:0.8rem; background:var(--bg2); padding:0.4rem 1rem; border-radius:12px; border:1px solid var(--border);">
-      <i class="fas fa-tags" style="color:var(--text3); font-size:0.9rem;"></i>
-      <select name="type" class="admin-input-clean" style="border:none; background:transparent; font-weight:600; color:var(--text2); outline:none; padding:0.2rem;">
+    <div style="display:flex; align-items:center; gap:0.75rem; background:#f8fafc; padding:0.5rem 1rem; border-radius:12px; border:1px solid #e2e8f0;">
+      <i class="fas fa-tag" style="color:#94a3b8; font-size:0.9rem;"></i>
+      <select name="type" style="border:none; background:transparent; font-weight:600; color:#475569; outline:none; font-size:0.9rem; cursor:pointer;">
         <option value="">Tous les types</option>
         <option value="perdu" <?= $type === 'perdu' ? 'selected' : '' ?>>Perdus</option>
         <option value="trouve" <?= $type === 'trouve' ? 'selected' : '' ?>>Trouvés</option>
       </select>
     </div>
-
-    <button type="submit" class="btn-action blue" style="padding:0.6rem 1.2rem;">
-      <i class="fas fa-search"></i> Appliquer
-    </button>
-    
-    <a href="<?= url('admin/annonces.php') ?>" class="btn-action gray" title="Réinitialiser" style="width:40px; height:40px; border-radius:12px; justify-content:center;">
-      <i class="fas fa-undo"></i>
-    </a>
-
-    <div style="margin-left:auto; display:flex; align-items:center; gap:0.5rem; color:var(--text3); font-weight:600; font-size:0.9rem; background:var(--bg2); padding:0.4rem 1rem; border-radius:12px;">
-      <i class="fas fa-database"></i> <span><?= $total ?></span> <small>annonces</small>
+    <button type="submit" class="btn-action-saas btn-primary-saas" style="padding:0.6rem 1.5rem;"><i class="fas fa-search"></i> Filtrer</button>
+    <a href="<?= url('admin/annonces.php') ?>" class="btn-logout" title="Réinitialiser" style="width:42px; height:42px;"><i class="fas fa-undo"></i></a>
+    <div style="margin-left:auto; font-weight:700; color:#94a3b8; font-size:0.9rem; display:flex; align-items:center; gap:0.5rem;">
+      <span style="color:#1e293b;"><?= $total ?></span> annonces au total
     </div>
   </form>
 </div>
 
-<div class="admin-table-wrap" style="background:transparent; border:none; box-shadow:none; overflow:visible !important;">
-  <table class="admin-table" style="border-collapse: separate; border-spacing: 0 1rem; margin-top:-1rem; overflow:visible !important;">
+<div class="saas-card" style="padding:0; overflow:hidden;">
+  <table class="saas-table">
     <thead>
-      <tr style="background:transparent; box-shadow:none;">
-        <th style="width:60px; padding-left:1.5rem;">#</th>
+      <tr>
+        <th style="width:80px;">ID</th>
         <th>Objet</th>
         <th>Catégorie & Lieu</th>
         <th>Type</th>
@@ -329,7 +292,7 @@ $annonces = $annonces->fetchAll();
                   <?php endif; ?>
                   
                   <?php if ($admin_user['role'] === 'admin'): ?>
-                    <a href="?action=delete&id=<?= $a['id'] ?>&csrf=<?= $csrf ?>&type=<?= $type ?>&statut=<?= $statut ?>" class="dropdown-item danger" onclick="return confirm('Supprimer définitivement cette annonce ?')"><i class="fas fa-trash"></i> Supprimer</a>
+                    <a href="?action=delete&id=<?= $a['id'] ?>&csrf=<?= $csrf ?>&type=<?= $type ?>&statut=<?= $statut ?>" class="dropdown-item danger" onclick="handleConfirmLink(event, this, {title:'Supprimer ?', text:'Voulez-vous vraiment supprimer définitivement cette annonce ?', danger:true})"><i class="fas fa-trash"></i> Supprimer</a>
                   <?php endif; ?>
                 </div>
               </div>

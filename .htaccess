@@ -3,11 +3,12 @@ ServerSignature Off
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    # Redirect root to index.php if not a file/dir
+    # Redirect root to welcome.php if not a file/dir
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^$ /index.php [L]
+    RewriteRule ^$ /welcome.php [L]
 </IfModule>
+DirectoryIndex welcome.php index.php
 
 # Security headers
 <IfModule mod_headers.c>

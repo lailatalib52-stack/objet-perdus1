@@ -9,36 +9,28 @@ $eleves->execute([$user['id']]);
 $eleves = $eleves->fetchAll();
 ?>
 
-<section class="detail-section">
-    <div class="vue-ensemble-header">
-        <div class="vue-ensemble-title">
-            <i class="fas fa-child" style="color:var(--accent);"></i> Mes enfants
-        </div>
-    </div>
-
+<div class="espace-parent-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:1.5rem;">
     <?php if (empty($eleves)): ?>
-        <div class="empty-state">
-            <i class="fas fa-user-slash"></i>
+        <div class="modern-card" style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem;">
+            <i class="fas fa-user-slash" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1.5rem;"></i>
             <h3>Aucun élève associé</h3>
-            <p>Veuillez contacter le bureau du CPE pour lier vos enfants à votre compte parent.</p>
+            <p style="color: #64748b;">Veuillez contacter l'administration pour lier vos enfants à votre compte.</p>
         </div>
     <?php else: ?>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.5rem;">
-            <?php foreach ($eleves as $e): ?>
-                <div class="detail-section" style="padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; margin-bottom: 0; cursor: default;">
-                    <div style="width: 56px; height: 56px; background: var(--accent-light); color: var(--accent); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; border: 1px solid var(--border2);">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div>
-                        <h4 style="margin: 0 0 0.2rem 0; font-size: 1.1rem; color: var(--text);"><?= clean($e['prenom'] . ' ' . $e['nom']) ?></h4>
-                        <span style="font-size: 0.82rem; color: var(--text3); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.4rem;">
-                            <i class="fas fa-school" style="font-size: 0.75rem;"></i> <?= clean($e['classe']) ?>
-                        </span>
-                    </div>
+        <?php foreach ($eleves as $e): ?>
+            <div class="modern-card" style="display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem;">
+                <div style="width: 64px; height: 64px; background: #eff6ff; color: #2563eb; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0;">
+                    <i class="fas fa-graduation-cap"></i>
                 </div>
-            <?php endforeach; ?>
-        </div>
+                <div>
+                    <h4 style="margin: 0; font-size: 1.2rem; font-weight: 800; color: #1e293b;"><?= clean($e['prenom'] . ' ' . $e['nom']) ?></h4>
+                    <p style="margin: 0.25rem 0 0; color: #64748b; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem;">
+                        <i class="fas fa-school" style="color: #94a3b8;"></i> <?= clean($e['classe']) ?>
+                    </p>
+                </div>
+            </div>
+        <?php endforeach; ?>
     <?php endif; ?>
-</section>
+</div>
 
 <?php require_once __DIR__ . '/includes/parent_footer.php'; ?>

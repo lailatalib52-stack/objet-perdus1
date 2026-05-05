@@ -172,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
       if (!currentDropdownBtn || menu !== currentDropdownBtn.querySelector('.dropdown-menu')) {
         menu.classList.remove('show');
+        const row = menu.closest('tr');
+        if (row) row.style.zIndex = '';
       }
     });
     
@@ -180,7 +182,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const dropdown = isDropdownBtn.closest('.dropdown');
       if (dropdown) {
         const menu = dropdown.querySelector('.dropdown-menu');
-        if (menu) menu.classList.toggle('show');
+        if (menu) {
+          menu.classList.toggle('show');
+          const row = dropdown.closest('tr');
+          if (row) {
+            row.style.position = 'relative';
+            row.style.zIndex = menu.classList.contains('show') ? '100' : '';
+          }
+        }
       }
     }
   });

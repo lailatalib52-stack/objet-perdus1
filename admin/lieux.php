@@ -34,20 +34,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRF($_POST['csrf_token'] ?? 
 $lieux = $pdo->query("SELECT l.*, COUNT(a.id) AS nb FROM lieux l LEFT JOIN annonces a ON a.lieu_id=l.id GROUP BY l.id ORDER BY l.nom")->fetchAll();
 ?>
 
-<div class="vue-ensemble-header">
-  <div class="vue-ensemble-title" style="text-transform:none; font-size:1.6rem; font-weight:700;">
-    <i class="fas fa-map-marker-alt" style="color:var(--accent);"></i> Gestion des Lieux
+<div class="page-header-v3">
+  <div>
+    <h1>Gestion des Lieux</h1>
   </div>
   <button onclick="document.getElementById('addForm').style.display='block'; this.style.display='none'"
-    class="btn-action blue btn-new-location">
+    class="btn-action-saas btn-primary-saas btn-new-location">
     <i class="fas fa-plus"></i> Nouveau Lieu
   </button>
 </div>
 
 <?php if ($msg): ?>
-  <div class="alert alert-success"><?= clean($msg) ?></div><?php endif; ?>
+  <div class="alert alert-success"><i class="fas fa-check"></i> <?= clean($msg) ?></div><?php endif; ?>
 <?php if ($error): ?>
-  <div class="alert alert-error"><?= clean($error) ?></div><?php endif; ?>
+  <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <?= clean($error) ?></div><?php endif; ?>
 <div id="addForm" class="admin-section"
   style="display:none; padding:2rem; margin-bottom:2rem; background:#fff; border-radius:20px; border:1px solid var(--border); box-shadow:var(--shadow-sm);">
   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
@@ -102,7 +102,7 @@ $lieux = $pdo->query("SELECT l.*, COUNT(a.id) AS nb FROM lieux l LEFT JOIN annon
           <i class="fas fa-edit"></i>
         </button>
         <?php if ($admin_user['role'] === 'admin'): ?>
-          <form method="POST" onsubmit="return confirm('Supprimer définitivement ce lieu ?')" style="margin:0;">
+          <form method="POST" onsubmit="handleConfirm(event, this, {title:'Supprimer ?', text:'Supprimer définitivement ce lieu ?', danger:true})" style="margin:0;">
             <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
             <input type="hidden" name="action" value="delete">
             <input type="hidden" name="id" value="<?= $l['id'] ?>">

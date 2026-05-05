@@ -37,21 +37,17 @@ $eleves = $pdo->query("SELECT e.*, u.prenom AS parent_prenom, u.nom AS parent_no
 $csrf = generateCSRF();
 ?>
 
-<div class="vue-ensemble-header">
-  <div class="vue-ensemble-title" style="text-transform:none; font-size:1.6rem; font-weight:700;">
-    <i class="fas fa-user-graduate" style="color:var(--accent);"></i> Gestion des Élèves
+<div class="page-header-v3">
+  <div>
+    <h1>Gestion des Élèves</h1>
   </div>
-  <div style="display:flex; gap:10px;">
-    <button onclick="document.getElementById('addForm').style.display='block'; this.style.display='none'" class="btn-new-annonce" style="padding:0.6rem 1.2rem; font-size:0.9rem;">
-       <i class="fas fa-plus"></i> Ajouter un élève
-    </button>
-  </div>
+  <button onclick="document.getElementById('addForm').style.display='block'; this.style.display='none'" class="btn-action-saas btn-primary-saas">
+    <i class="fas fa-plus"></i> Ajouter un élève
+  </button>
 </div>
 
-<?php if ($msg): ?>
-  <div class="alert alert-success"><i class="fas fa-check"></i> <?= clean($msg) ?></div><?php endif; ?>
-<?php if ($error): ?>
-  <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <?= clean($error) ?></div><?php endif; ?>
+<?php if ($msg): ?><div class="alert alert-success"><i class="fas fa-check"></i> <?= clean($msg) ?></div><?php endif; ?>
+<?php if ($error): ?><div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <?= clean($error) ?></div><?php endif; ?>
 
 <div id="addForm" class="admin-section"
   style="display:none; padding:2rem; margin-bottom:2rem; background:#fff; border-radius:12px; box-shadow:var(--admin-shadow);">
@@ -147,7 +143,7 @@ $csrf = generateCSRF();
               <div style="height:1px; background:var(--border); margin:0.3rem 0;"></div>
 
               <!-- Action Supprimer -->
-              <form method="POST" id="form-delete-<?= $e['id'] ?>" onsubmit="return confirm('Supprimer cet élève ?')">
+              <form method="POST" id="form-delete-<?= $e['id'] ?>" onsubmit="handleConfirm(event, this, {title:'Supprimer ?', text:'Supprimer cet élève de la base de données ?', danger:true})">
                 <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
                 <input type="hidden" name="action" value="delete">
                 <input type="hidden" name="id" value="<?= $e['id'] ?>">
@@ -165,32 +161,32 @@ $csrf = generateCSRF();
 
 
 <!-- Modal edit élève -->
-<div id="editModal" class="modal"
-  style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-  <div class="modal-box" style="background:#fff; padding:2rem; border-radius:12px; max-width:500px; width:90%;">
-    <h3 style="margin-top:0;"><i class="fas fa-edit"></i> Modifier l'élève</h3>
-    <form method="POST" style="display:flex; flex-direction:column; gap:1rem;">
-      <input type="hidden" name="csrf_token" value="<?= $csrf ?>"><input type="hidden" name="action" value="edit"><input
-        type="hidden" name="id" id="editId">
-      <div class="form-group"><label>Prénom *</label><input type="text" name="prenom" id="editPrenom" required
-          class="admin-input" style="width:100%;"></div>
-      <div class="form-group"><label>Nom *</label><input type="text" name="nom" id="editNom" required
-          class="admin-input" style="width:100%;"></div>
-      <div class="form-group"><label>Classe</label><input type="text" name="classe" id="editClasse" class="admin-input"
-          style="width:100%;"></div>
-      <div class="form-group"><label>N° étudiant</label><input type="text" name="numero_etudiant" id="editNum"
-          class="admin-input" style="width:100%;"></div>
-      <div class="form-group"><label>Parent</label>
-        <select name="parent_id" id="editParent" class="admin-input" style="width:100%;">
+<div id="editModal" class="w-modal-overlay" style="display:flex; opacity:0; pointer-events:none; transition: all 0.3s ease;">
+  <div class="saas-card" style="width:100%; max-width:500px; transform: scale(0.9); transition: all 0.3s ease;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+      <h2 style="margin:0; font-size:1.4rem; font-weight:800;"><i class="fas fa-edit" style="color:#3b82f6;"></i> Modifier l'élève</h2>
+      <button onclick="closeModal()" class="btn-action-saas badge-saas gray">Fermer</button>
+    </div>
+    <form method="POST" style="display:flex; flex-direction:column; gap:1.25rem;">
+      <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
+      <input type="hidden" name="action" value="edit">
+      <input type="hidden" name="id" id="editId">
+      
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Prénom *</label><input type="text" name="prenom" id="editPrenom" required style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Nom *</label><input type="text" name="nom" id="editNom" required style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Classe</label><input type="text" name="classe" id="editClasse" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">N° étudiant</label><input type="text" name="numero_etudiant" id="editNum" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;"></div>
+      <div class="form-group"><label style="display:block; font-weight:700; font-size:0.85rem; color:#64748b; margin-bottom:0.5rem;">Parent</label>
+        <select name="parent_id" id="editParent" style="width:100%; padding:0.8rem; border-radius:10px; border:1px solid #e2e8f0;">
           <option value="">— Aucun —</option>
           <?php foreach ($parents as $p): ?>
             <option value="<?= $p['id'] ?>"><?= clean($p['prenom'] . ' ' . $p['nom']) ?></option><?php endforeach; ?>
         </select>
       </div>
-      <div class="modal-actions" style="display:flex; gap:1rem; margin-top:1rem;">
-        <button type="submit" class="btn-action blue" style="flex:1; justify-content:center;">Enregistrer</button>
-        <button type="button" onclick="document.getElementById('editModal').style.display='none'"
-          class="btn-action gray" style="flex:1; justify-content:center;">Annuler</button>
+      <div style="margin-top:0.5rem;">
+        <button type="submit" class="btn-action-saas btn-primary-saas" style="width:100%; justify-content:center; padding:1rem;">
+          <i class="fas fa-save"></i> Enregistrer
+        </button>
       </div>
     </form>
   </div>
@@ -204,10 +200,18 @@ $csrf = generateCSRF();
     document.getElementById('editClasse').value = e.classe || '';
     document.getElementById('editNum').value = e.numero_etudiant || '';
     document.getElementById('editParent').value = e.parent_id || '';
-    document.getElementById('editModal').style.display = 'flex';
+    
+    const modal = document.getElementById('editModal');
+    modal.style.opacity = '1';
+    modal.style.pointerEvents = 'auto';
+    modal.querySelector('.saas-card').style.transform = 'scale(1)';
   }
-  window.onclick = function (e) { 
-    if (e.target === document.getElementById('editModal')) document.getElementById('editModal').style.display = 'none';
+
+  function closeModal() {
+    const modal = document.getElementById('editModal');
+    modal.style.opacity = '0';
+    modal.style.pointerEvents = 'none';
+    modal.querySelector('.saas-card').style.transform = 'scale(0.9)';
   }
 </script>
 

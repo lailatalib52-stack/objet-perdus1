@@ -38,8 +38,8 @@ if (!$d) {
   </div>
   <?php if ($d['statut'] === 'en_attente'): ?>
     <div style="display:flex; gap:1rem;">
-      <a href="demandes.php?action=approuver&id=<?= $d['id'] ?>&csrf=<?= $csrf_val ?>" class="btn-primary" style="background:#10b981;"><i class="fas fa-check"></i> Approuver la demande</a>
-      <a href="demandes.php?action=refuser&id=<?= $d['id'] ?>&csrf=<?= $csrf_val ?>" class="btn-primary" style="background:#ef4444;"><i class="fas fa-times"></i> Refuser</a>
+      <a href="demandes.php?action=approuver&id=<?= $d['id'] ?>&csrf=<?= $csrf_val ?>" class="btn btn-primary" style="background:#10b981;"><i class="fas fa-check"></i> Approuver la demande</a>
+      <a href="demandes.php?action=refuser&id=<?= $d['id'] ?>&csrf=<?= $csrf_val ?>" class="btn btn-primary" style="background:#ef4444;"><i class="fas fa-times"></i> Refuser</a>
     </div>
   <?php else: ?>
     <span class="badge-status" style="font-size:1.1rem; padding:0.5rem 1.5rem;"><?= ucfirst($d['statut']) ?></span>

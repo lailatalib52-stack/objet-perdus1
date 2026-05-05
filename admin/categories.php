@@ -34,15 +34,17 @@ $categories = $pdo->query("SELECT c.*, COUNT(a.id) AS nb_annonces FROM categorie
 $icones = ['fas fa-tshirt'=>'Vêtements','fas fa-mobile-alt'=>'Téléphone','fas fa-book'=>'Livre','fas fa-gem'=>'Bijou','fas fa-key'=>'Clés','fas fa-backpack'=>'Sac','fas fa-futbol'=>'Sport','fas fa-apple-alt'=>'Nourriture','fas fa-glasses'=>'Lunettes','fas fa-wallet'=>'Portefeuille','fas fa-headphones'=>'Casque','fas fa-umbrella'=>'Parapluie','fas fa-box'=>'Divers'];
 ?>
 
-    <div class="vue-ensemble-header">
-      <div class="vue-ensemble-title">
-        <i class="fas fa-tags" style="color:#ec4899;"></i> <?= clean($page_title) ?>
-      </div>
-      <button onclick="document.getElementById('addForm').style.display='block'; this.style.display='none'" class="btn-action blue"><i class="fas fa-plus"></i> Nouvelle Catégorie</button>
-    </div>
+<div class="page-header-v3">
+  <div>
+    <h1>Gestion des Catégories</h1>
+  </div>
+  <button onclick="document.getElementById('addForm').style.display='block'; this.style.display='none'" class="btn-action-saas btn-primary-saas">
+    <i class="fas fa-plus"></i> Nouvelle Catégorie
+  </button>
+</div>
 
-    <?php if ($msg): ?><div class="alert alert-success"><i class="fas fa-check"></i> <?= clean($msg) ?></div><?php endif; ?>
-    <?php if ($error): ?><div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <?= clean($error) ?></div><?php endif; ?>
+<?php if ($msg): ?><div class="alert alert-success"><i class="fas fa-check"></i> <?= clean($msg) ?></div><?php endif; ?>
+<?php if ($error): ?><div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> <?= clean($error) ?></div><?php endif; ?>
 
     <div id="addForm" class="admin-section" style="display:none; padding:1.5rem; margin-bottom:2rem;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem;">
@@ -84,7 +86,7 @@ $icones = ['fas fa-tshirt'=>'Vêtements','fas fa-mobile-alt'=>'Téléphone','fas
               <i class="fas fa-edit"></i>
             </button>
             <?php if ($admin_user['role']==='admin'): ?>
-            <form method="POST" onsubmit="return confirm('Supprimer définitivement cette catégorie ?')" style="margin:0;">
+            <form method="POST" onsubmit="handleConfirm(event, this, {title:'Supprimer ?', text:'Supprimer définitivement cette catégorie ?', danger:true})" style="margin:0;">
               <input type="hidden" name="csrf_token" value="<?= $csrf ?>">
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="id" value="<?= $c['id'] ?>">
