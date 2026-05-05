@@ -22,31 +22,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRF($_POST['csrf_token'] ?? 
     $tel = clean($_POST['contact_tel'] ?? '');
     
     if ($type && $cat_id && strlen($desc) >= 10) {
-        $photo_url = '';
-        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
-            $allowed = ['jpg', 'jpeg', 'png', 'webp'];
-            $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
-            if (in_array($ext, $allowed)) {
-                $filename = uniqid() . '.' . $ext;
-                if (!is_dir('public/uploads')) mkdir('public/uploads', 0777, true);
-                move_uploaded_file($_FILES['photo']['tmp_name'], 'public/uploads/' . $filename);
-                $photo_url = 'public/uploads/' . $filename;
-            }
-        }
-        
-        $sql = "INSERT INTO annonces (type, categorie_id, lieu_id, description, date_objet, photo_url, user_id, declarant_nom, contact_email, contact_tel, statut) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'en_attente')";
-        $stmt = $pdo->prepare($sql);
-        $res = $stmt->execute([
-            $type, $cat_id, $lieu_id ?: null, $desc, $date_obj, $photo_url, 
-            $user ? $user['id'] : null, $declarant, $email, $tel
-        ]);
-        
-        if ($res) {
-            header('Location: ' . url('index.php?msg=Merci ! Votre annonce est en attente de validation.'));
-            exit;
+        // Validation photo obligatoire pour les objets trouvés
+        if ($type === 'trouve' && (!isset($_FILES['photo']) || $_FILES['photo']['error'] !== 0)) {
+            $error = "La photo est obligatoire pour signaler un objet trouvé.";
         } else {
-            $error = "Une erreur est survenue lors de l'enregistrement.";
+            $photo_url = '';
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
+                $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+                $ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
+                if (in_array($ext, $allowed)) {
+                    $filename = uniqid() . '.' . $ext;
+                    if (!is_dir('public/uploads')) mkdir('public/uploads', 0777, true);
+                    move_uploaded_file($_FILES['photo']['tmp_name'], 'public/uploads/' . $filename);
+                    $photo_url = 'public/uploads/' . $filename;
+                }
+            }
+            
+            $sql = "INSERT INTO annonces (type, categorie_id, lieu_id, description, date_objet, photo_url, user_id, declarant_nom, contact_email, contact_tel, statut) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'en_attente')";
+            $stmt = $pdo->prepare($sql);
+            $res = $stmt->execute([
+                $type, $cat_id, $lieu_id ?: null, $desc, $date_obj, $photo_url, 
+                $user ? $user['id'] : null, $declarant, $email, $tel
+            ]);
+            
+            if ($res) {
+                header('Location: ' . url('index.php?msg=Merci ! Votre annonce est en attente de validation.'));
+                exit;
+            } else {
+                $error = "Une erreur est survenue lors de l'enregistrement.";
+            }
         }
     } else {
         $error = "Veuillez remplir tous les champs obligatoires (Type, Catégorie, Description min. 10 car.).";
@@ -301,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRF($_POST['csrf_token'] ?? 
 
       <!-- STEP 4 -->
       <div class="form-step-card">
-        <div class="step-title">
+        <div class="step-title" id="photoStepTitle">
           <div class="step-num">4</div>
           <h3>Photo de l'objet</h3>
         </div>
@@ -354,11 +359,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && verifyCSRF($_POST['csrf_token'] ?? 
   </footer>
 
   <script>
-    // Photo preview logic
     const photoInput = document.getElementById('photoInput');
     const photoPreview = document.getElementById('photoPreview');
     const uploadText = document.getElementById('uploadText');
     const uploadArea = document.getElementById('uploadArea');
+    const typeRadios = document.querySelectorAll('input[name="type"]');
+    const photoLabel = document.querySelector('#photoStepTitle h3');
+
+    // Toggle required status based on type
+    function updatePhotoRequirement() {
+      const selectedType = document.querySelector('input[name="type"]:checked')?.value;
+      if (selectedType === 'trouve') {
+        photoInput.required = true;
+        photoLabel.innerHTML = 'Photo de l\'objet <span style="color:#ef4444;">*</span>';
+        if (!photoInput.files.length) {
+          uploadArea.style.borderColor = "#ef4444";
+          uploadArea.style.background = "#fef2f2";
+        }
+      } else {
+        photoInput.required = false;
+        photoLabel.innerHTML = 'Photo de l\'objet (optionnel)';
+        uploadArea.style.borderColor = "#e2e8f0";
+        uploadArea.style.background = "transparent";
+      }
+    }
+
+    typeRadios.forEach(radio => {
+      radio.addEventListener('change', updatePhotoRequirement);
+    });
+
+    // Initial check
+    updatePhotoRequirement();
 
     photoInput.addEventListener('change', function() {
       const file = this.files[0];
